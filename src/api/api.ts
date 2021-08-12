@@ -74,6 +74,10 @@ export const fetchApiWithGlobalCatch = <T>({
         }
       });
   } catch (e) {
+    if (onError) {
+      onError();
+    }
+
     // TODO: make error messages user friendly
     store.notificationStore.addNotification({
       color: "error",
