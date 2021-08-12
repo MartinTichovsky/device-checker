@@ -24,6 +24,7 @@ const dictionary: Lang = {
   },
   general: {
     noResults: "Nebyly nalezeny žádné výsledky",
+    required: "Toto pole je povinné",
   },
   login: {
     formButtonLogin: "Přihlásit se",

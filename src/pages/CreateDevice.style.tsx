@@ -1,34 +1,5 @@
-import { makeStyles, Select, TextField, Theme } from "@material-ui/core";
-import styled from "@emotion/styled";
+import { makeStyles, Theme } from "@material-ui/core";
 import { ITheme } from "../theme";
-
-export const SelectStyled = styled(Select)({
-  marginBottom: 15,
-  padding: "5px 0",
-  width: "100%",
-});
-
-export const TextFieldStyled = styled(TextField)({
-  display: "block",
-  marginBottom: 15,
-  width: "100%",
-
-  "> .MuiFormLabel-root": {
-    color: "rgba(0, 0, 0, 0.40)",
-  },
-
-  "> .MuiInput-root": {
-    width: "100%",
-  },
-
-  ".MuiInput-underline:before": {
-    borderBottom: "1px solid rgba(0, 0, 0, 0.30)",
-  },
-
-  ".MuiInput-input": {
-    padding: "10px 0",
-  },
-});
 
 export const useStyles = makeStyles((theme: Theme & ITheme) => ({
   button: {

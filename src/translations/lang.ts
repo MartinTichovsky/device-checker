@@ -24,6 +24,7 @@ export type Lang = Readonly<{
   };
   general: {
     noResults: string;
+    required: string;
   };
   login: {
     formButtonLogin: string;

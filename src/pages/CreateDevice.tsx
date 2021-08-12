@@ -1,23 +1,17 @@
 import { useRootStore } from "../providers/use-root-store";
-import {
-  Button,
-  CircularProgress,
-  Grid,
-  InputLabel,
-  MenuItem,
-} from "@material-ui/core";
+import { Button, CircularProgress, Grid, MenuItem } from "@material-ui/core";
 import React from "react";
 import clsx from "clsx";
-import { SelectStyled, TextFieldStyled, useStyles } from "./CreateDevice.style";
-import {
-  createProxy,
-  i18ObjectPath,
-  lastObjectProperty,
-} from "proxy-object-path";
+import { useStyles } from "./CreateDevice.style";
+import { i18ObjectPath } from "proxy-object-path";
 import lang from "../translations/lang";
 import { useTranslation } from "react-i18next";
 import { EditPhone, OsEnum } from "../api/types";
 import { createPhoneRequest } from "../api/methods/phones";
+import { FormTextField } from "../components/fields/FormTextField";
+import { FormStore } from "../components/fields/types";
+import { FormSelectField } from "../components/fields/FormSelectField";
+import { setFormValue, validateFields } from "../components/fields/helper";
 
 // this should come from the back-end, can't be hardcoded!
 const VendorList = [
@@ -33,39 +27,32 @@ const VendorList = [
   "XIAOMI",
 ];
 
-interface State {
+interface State extends FormStore<EditPhone> {
   pending: boolean;
-  values: EditPhone;
 }
 
-const formValuesProxy = createProxy<EditPhone>();
+const requiredFields: (keyof EditPhone)[] = ["code", "model", "os", "vendor"];
+const initialValues: State = { errors: [], pending: false, values: {} };
 
 // TODO: rework how the form works to avoid re-rendering when a input value is changed
-
-const setFormValue = (
-  setState: React.Dispatch<React.SetStateAction<State>>,
-  key: string,
-  value: string
-) => {
-  setState((prevState) => ({
-    ...prevState,
-    values: {
-      ...prevState.values,
-      [key]: value,
-    },
-  }));
-};
-
 const CreateDevice = () => {
-  const [state, setState] = React.useState<State>({
-    pending: false,
-    values: {},
-  });
+  const [state, setState] = React.useState<State>(initialValues);
   const classes = useStyles();
   const store = useRootStore();
   const { t } = useTranslation();
 
   const handleCreateDevice = React.useCallback(() => {
+    const errors = validateFields(state.values, requiredFields);
+
+    if (errors.length) {
+      setState((prevState) => ({
+        ...prevState,
+        errors,
+      }));
+
+      return;
+    }
+
     setState((prevState) => ({
       ...prevState,
       pending: true,
@@ -81,10 +68,7 @@ const CreateDevice = () => {
       },
       onSuccess: (response) => {
         if (response) {
-          setState({
-            pending: false,
-            values: {},
-          });
+          setState(initialValues);
           store.notificationStore.addNotification({
             color: "success",
             message: t(i18ObjectPath(lang.createDevice.addedInfo)),
@@ -94,7 +78,7 @@ const CreateDevice = () => {
       },
       store,
     });
-  }, [setState, store]);
+  }, [setState, store, t]);
 
   return (
     <Grid
@@ -111,94 +95,100 @@ const CreateDevice = () => {
             {t(i18ObjectPath(lang.createDevice.label))}
           </h1>
 
-          <TextFieldStyled
+          <FormTextField<EditPhone, State>
+            fieldKey="code"
             label={t(i18ObjectPath(lang.createDevice.code))}
             onChange={(event) =>
-              setFormValue(
+              setFormValue<EditPhone, State>(
                 setState,
-                lastObjectProperty(formValuesProxy.code),
+                "code",
                 event.currentTarget.value
               )
             }
-            value={state.values.code || ""}
+            requiredFields={requiredFields}
+            state={state}
           />
-          <span>
-            <InputLabel shrink={true} htmlFor="create-device-vendor-label">
-              {t(i18ObjectPath(lang.common.vendor))}
-            </InputLabel>
-            <SelectStyled
-              labelId="create-device-vendor-label"
-              onChange={(event) =>
-                setFormValue(
-                  setState,
-                  lastObjectProperty(formValuesProxy.vendor),
-                  event.target.value as string
-                )
-              }
-              value={state.values.vendor || ""}
-            >
-              {VendorList.map((vendor) => (
-                <MenuItem key={vendor} value={vendor}>
-                  {vendor}
-                </MenuItem>
-              ))}
-            </SelectStyled>
-          </span>
-          <TextFieldStyled
+
+          <FormSelectField<EditPhone, State>
+            fieldKey="vendor"
+            label={t(i18ObjectPath(lang.common.os))}
+            onChange={(event) =>
+              setFormValue<EditPhone, State>(
+                setState,
+                "vendor",
+                event.target.value as string
+              )
+            }
+            options={VendorList.map((vendor) => (
+              <MenuItem key={vendor} value={vendor}>
+                {vendor}
+              </MenuItem>
+            ))}
+            requiredFields={requiredFields}
+            state={state}
+          />
+
+          <FormTextField<EditPhone, State>
+            fieldKey="model"
             label={t(i18ObjectPath(lang.createDevice.model))}
             onChange={(event) =>
-              setFormValue(
+              setFormValue<EditPhone, State>(
                 setState,
-                lastObjectProperty(formValuesProxy.model),
+                "model",
                 event.currentTarget.value
               )
             }
-            value={state.values.model || ""}
+            state={state}
+            requiredFields={requiredFields}
           />
-          <span>
-            <InputLabel shrink={true} htmlFor="create-device-os-label">
-              {t(i18ObjectPath(lang.common.os))}
-            </InputLabel>
-            <SelectStyled
-              labelId="create-device-os-label"
-              onChange={(event) =>
-                setFormValue(
-                  setState,
-                  lastObjectProperty(formValuesProxy.os),
-                  event.target.value as string
-                )
-              }
-              value={state.values.os || ""}
-            >
-              {Object.keys(OsEnum).map((os) => (
-                <MenuItem key={os} value={os}>
-                  {os}
-                </MenuItem>
-              ))}
-            </SelectStyled>
-          </span>
-          <TextFieldStyled
+
+          <FormSelectField<EditPhone, State>
+            fieldKey="os"
+            label={t(i18ObjectPath(lang.common.os))}
+            onChange={(event) =>
+              setFormValue<EditPhone, State>(
+                setState,
+                "os",
+                event.target.value as string
+              )
+            }
+            options={Object.keys(OsEnum).map((os) => (
+              <MenuItem key={os} value={os}>
+                {os}
+              </MenuItem>
+            ))}
+            requiredFields={requiredFields}
+            state={state}
+          />
+
+          <FormTextField<EditPhone, State>
+            fieldKey="osVersion"
             label={t(i18ObjectPath(lang.createDevice.osVersion))}
             onChange={(event) =>
-              setFormValue(
+              setFormValue<EditPhone, State>(
                 setState,
-                lastObjectProperty(formValuesProxy.osVersion),
+                "osVersion",
                 event.currentTarget.value
               )
             }
-            value={state.values.osVersion || ""}
+            state={state}
+            requiredFields={requiredFields}
           />
-          <TextFieldStyled
+
+          <FormTextField<EditPhone, State>
+            fieldKey="image"
             label={t(i18ObjectPath(lang.createDevice.image))}
             onChange={(event) =>
-              setFormValue(
+              setFormValue<EditPhone, State>(
                 setState,
-                lastObjectProperty(formValuesProxy.image),
+                "image",
                 event.currentTarget.value
               )
             }
-            value={state.values.image || ""}
+            state={state}
+            requiredFields={requiredFields}
           />
+
           {state.pending ? (
             <Button className={clsx(classes.button, classes.loadingButton)}>
               <CircularProgress size={24} />
