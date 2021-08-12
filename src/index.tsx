@@ -9,16 +9,19 @@ import { RootStore } from "./stores/root-store";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { muiTheme, theme } from "./theme";
-import "./translations/i18n";
+import i18n from "./translations/i18n";
+import { I18nextProvider } from "react-i18next";
 
 ReactDOM.render(
   <RootStoreProvider store={new RootStore()}>
     <StylesProvider injectFirst={true}>
       <MuiThemeProvider theme={muiTheme}>
         <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <Router />
-          </BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <BrowserRouter>
+              <Router />
+            </BrowserRouter>
+          </I18nextProvider>
         </ThemeProvider>
       </MuiThemeProvider>
     </StylesProvider>

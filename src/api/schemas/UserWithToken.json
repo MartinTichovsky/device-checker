@@ -1,31 +1,28 @@
 {
-  "title": "User with token",
-  "type": "object",
-  "definitions": {
-    "AuthToken": {
-      "title": "Authentication token",
-      "type": "string"
-    }
-  },
-  "properties": {
-    "id": {
-      "type": "string"
-    },
-    "type": {
-      "type": "string",
-      "enum": [
-        "user",
-        "admin"
-      ]
-    },
-    "login": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "token": {
-      "$ref": "#/definitions/AuthToken"
-    }
-  }
+	"title": "User with token",
+	"type": "object",
+	"definitions": {
+		"AuthToken": {
+			"title": "Authentication token",
+			"type": "string"
+		}
+	},
+	"properties": {
+		"id": {
+			"type": "string"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["user", "admin"]
+		},
+		"login": {
+			"type": "string"
+		},
+		"name": {
+			"type": "string"
+		},
+		"token": {
+			"$ref": "#/definitions/AuthToken"
+		}
+	}
 }

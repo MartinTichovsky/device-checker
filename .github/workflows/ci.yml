@@ -22,5 +22,11 @@ jobs:
       - name: Install
         run: yarn
 
+      - name: Build
+        run: yarn build
+
       - name: Test
         run: yarn test
+
+      - name: TypeScript check
+        run: yarn tsc
