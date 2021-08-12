@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import {
   StylesProvider,
-  ThemeProvider as MuiThemeProvider,
+  ThemeProvider as MuiThemeProvider
 } from "@material-ui/core";
 import Router from "./router/Router";
 import { RootStoreProvider } from "./providers/use-root-store";
