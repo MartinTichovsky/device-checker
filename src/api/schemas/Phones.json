@@ -1,0 +1,78 @@
+{
+  "title": "Phones",
+  "type": "array",
+  "definitions": {
+    "BorrowedObj": {
+      "title": "Borrowed object",
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "date": {
+          "type": "number",
+          "example": 1526486175115
+        }
+      }
+    },
+    "Phone": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string",
+          "enum": [
+            "ANDROID",
+            "IOS",
+            "WINDOWS"
+          ]
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "osVersion": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "borrowed": {
+          "$ref": "#/definitions/BorrowedObj"
+        }
+      }
+    },
+    "User": {
+      "title": "User",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "user",
+            "admin"
+          ]
+        },
+        "login": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "items": {
+    "$ref": "#/definitions/Phone"
+  }
+}

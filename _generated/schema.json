@@ -1,0 +1,720 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ETN Device Checker Test",
+    "description": "Simple API for the Device Checker application, used to manage borrowed mobile phones.",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://js-test-api.etnetera.cz/api/v1"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Log in an user",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/login`",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithToken"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Login or password parameters were missing in the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Login or password were incorrect. User was not logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get user data using an user id.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/users/2`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User data payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/phones": {
+      "get": {
+        "summary": "Get all phones.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Phone list payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Phone"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new phone.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EditPhone"
+        },
+        "responses": {
+          "201": {
+            "description": "New phone added.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Phone"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token or not enough privileges (user.type == 'admin').",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/phones/{id}": {
+      "get": {
+        "summary": "Get data for a phone by its ID.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones/14`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The phone ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Phone data payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Phone"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Phone not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Edit a phone by its ID.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones/14`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The phone ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EditPhone"
+        },
+        "responses": {
+          "200": {
+            "description": "Phone edited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Phone"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token or not enough privileges (user.type == 'admin').",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Phone not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a phone by its ID.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones/14`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The phone ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Phone deleted."
+          },
+          "401": {
+            "description": "Invalid or no authentication token or not enough privileges (user.type == 'admin').",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Phone not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/phones/{id}/borrow": {
+      "post": {
+        "summary": "Borrow a phone by its ID.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones/14/borrow`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The phone ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data of the borrowed phone.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Phone"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Phone cannot be borrowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Phone not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/phones/{id}/return": {
+      "post": {
+        "summary": "Return a phone by its ID.",
+        "description": "**Example URL:** `https://js-test-api.etnetera.cz/api/v1/phones/14/borrow`",
+        "parameters": [
+          {
+            "name": "Auth-Token",
+            "in": "header",
+            "description": "Authentication token acquired after logging in.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The phone ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data of the returned phone.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Phone"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or no authentication token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Phone cannot be returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Phone not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoginData": {
+        "title": "Login payload",
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "example": "frodo.baggins@etnetera.cz"
+          },
+          "password": {
+            "type": "string",
+            "example": "theoner1ng"
+          }
+        }
+      },
+      "Error": {
+        "title": "Error",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "user",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          },
+          "login": {
+            "type": "string",
+            "example": "frodo.baggins@etnetera.cz"
+          },
+          "name": {
+            "type": "string",
+            "example": "Frodo Baggins"
+          }
+        }
+      },
+      "UserWithToken": {
+        "title": "User with token",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "user",
+            "enum": [
+              "user",
+              "admin"
+            ]
+          },
+          "login": {
+            "type": "string",
+            "example": "frodo.baggins@etnetera.cz"
+          },
+          "name": {
+            "type": "string",
+            "example": "Frodo Baggins"
+          },
+          "token": {
+            "$ref": "#/components/schemas/AuthToken"
+          }
+        }
+      },
+      "Phone": {
+        "title": "Phone",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "code": {
+            "type": "string",
+            "example": "02-M-01"
+          },
+          "os": {
+            "type": "string",
+            "example": "ANDROID",
+            "enum": [
+              "ANDROID",
+              "IOS",
+              "WINDOWS"
+            ]
+          },
+          "vendor": {
+            "type": "string",
+            "example": "SAMSUNG"
+          },
+          "model": {
+            "type": "string",
+            "example": "Galaxy S5 mini"
+          },
+          "osVersion": {
+            "type": "string",
+            "example": "6.0.1"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://www.o2.cz/_pub/dc/a7/7b/470494_1130960_SG_S5_mini_black_bigdetail.png"
+          },
+          "borrowed": {
+            "$ref": "#/components/schemas/BorrowedObj"
+          }
+        }
+      },
+      "BorrowedObj": {
+        "title": "Borrowed object",
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "date": {
+            "type": "number",
+            "example": 1526486175115
+          }
+        }
+      },
+      "EditPhone": {
+        "title": "EditPhone",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "02-M-01"
+          },
+          "os": {
+            "type": "string",
+            "example": "ANDROID",
+            "enum": [
+              "ANDROID",
+              "IOS",
+              "WINDOWS"
+            ]
+          },
+          "vendor": {
+            "type": "string",
+            "example": "SAMSUNG"
+          },
+          "model": {
+            "type": "string",
+            "example": "Galaxy S5 mini"
+          },
+          "osVersion": {
+            "type": "string",
+            "example": "6.0.1"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://www.o2.cz/_pub/dc/a7/7b/470494_1130960_SG_S5_mini_black_bigdetail.png"
+          }
+        }
+      },
+      "AuthToken": {
+        "title": "Authentication token",
+        "type": "string",
+        "example": "FJSphM+/6UOQRgP+rJ4UPg=="
+      }
+    },
+    "requestBodies": {
+      "EditPhone": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/EditPhone"
+            }
+          }
+        }
+      }
+    }
+  }
+}

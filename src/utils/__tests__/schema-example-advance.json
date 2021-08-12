@@ -1,0 +1,89 @@
+{
+  "title": "Appointment Selector Feature App Content Config Schema",
+  "type": "object",
+  "properties": {
+    "disabledWeekdays": {
+      "description": "Days of the week that should be disabled for selection",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "daysOffset": {
+      "description": "Offset that specifies in how many days the user can select a day for a test drive",
+      "type": "string"
+    },
+    "days": {
+      "description": "Offset that specifies in how many days the user can select a day for a test drive",
+      "type": ["string", "number"]
+    },
+    "businessHours": {
+      "description": "Specify business hours of the dealer",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "description": "Specify from when dealer is opened e.g(8:00)",
+            "type": "string"
+          },
+          "till": {
+            "description": "Specify till when dealer is working e.g(18:00)",
+            "type": "string"
+          }
+        },
+        "required": ["from", "till"]
+      }
+    },
+    "credentials": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": ["null", "string"]
+            },
+            "password": {
+              "type": ["null", "string"]
+            }
+          },
+          "required": ["password", "username"]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "configurations": {
+      "$ref": "#/definitions/AcsConfigurationsSchema"
+    }
+  },
+  "required": ["daysOffset"],
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AcsConfigurationsSchema": {
+      "type": "object",
+      "properties": {
+        "tenant_technical": {
+          "$ref": "#/definitions/AcsSchema"
+        }
+      },
+      "required": ["tenant_technical"]
+    },
+    "AcsSchema": {
+      "type": "object",
+      "properties": {
+        "tenant": {
+          "description": "Tenant",
+          "examples": ["vw-de"],
+          "type": "string"
+        },
+        "application": {
+          "description": "Application ID",
+          "type": "string"
+        }
+      },
+      "required": ["application", "tenant"]
+    }
+  }
+}
