@@ -14,17 +14,14 @@ export const setFormValue = <T, State extends FormStore<T>>(
   }));
 };
 
-export const validateFields = <T>(values: T, requiredFields: (keyof T)[]) => {
+export const validateFields = <T extends { [key in keyof T]: string }>(
+  values: T,
+  requiredFields: (keyof T)[]
+) => {
   const keys = Object.keys(values) as (keyof T)[];
 
-  // TODO: fix the casting
   return requiredFields.filter(
     (field) =>
-      !(
-        keys.includes(field) &&
-        field in values &&
-        "trim" in values[field] &&
-        (values[field] as unknown as string)?.trim()
-      )
+      !(keys.includes(field) && field in values && values[field]?.trim())
   );
 };

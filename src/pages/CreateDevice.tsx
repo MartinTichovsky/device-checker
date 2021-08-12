@@ -11,7 +11,7 @@ import { setFormValue, validateFields } from "../components/fields/helper";
 import { FormStore } from "../components/fields/types";
 import { useRootStore } from "../providers/use-root-store";
 import lang from "../translations/lang";
-import { useStyles } from "./CreateDevice.style";
+import { useStyles } from "./CreateDevice.styles";
 
 // this should come from the back-end, can't be hardcoded!
 const VendorList = [

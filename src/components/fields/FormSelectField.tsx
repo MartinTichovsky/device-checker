@@ -14,7 +14,10 @@ interface OwnProps<T, State extends FormStore<T>>
   options: JSX.Element[];
 }
 
-export const FormSelectField = <T, State extends FormStore<T>>({
+export const FormSelectField = <
+  T extends { [key in keyof T]: string },
+  State extends FormStore<T>
+>({
   fieldKey,
   label,
   onChange,
@@ -24,12 +27,9 @@ export const FormSelectField = <T, State extends FormStore<T>>({
 }: OwnProps<T, State>) => {
   const { t } = useTranslation();
 
-  // TODO: fix the casting
   const error =
     state.errors.includes(fieldKey) &&
-    (!state.values[fieldKey] ||
-      (typeof state.values[fieldKey] === "string" &&
-        !(state.values[fieldKey] as unknown as string)?.trim()));
+    (!state.values[fieldKey] || !state.values[fieldKey]?.trim());
 
   const id = `create-device-${fieldKey}-label`;
 
