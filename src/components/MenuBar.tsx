@@ -9,7 +9,6 @@ import { RootStore } from "../stores/root-store";
 import { useRootStore } from "../providers/use-root-store";
 import {
   Drawer,
-  List,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -18,6 +17,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { i18ObjectPath } from "proxy-object-path";
 import lang from "../translations/lang";
+import { useLocation } from "react-router-dom";
 
 const LogOut = (store: RootStore) => {
   store.setUser(null);
@@ -31,6 +31,8 @@ export interface MenuItemType {
 }
 
 interface MenuItemProps {
+  classes: ReturnType<typeof useStyles>;
+  isActive: boolean;
   item: MenuItemType;
   toggleMenuOpen: () => void;
 }
@@ -42,6 +44,7 @@ interface OwnProps {
 const MenuBar = ({ items }: OwnProps) => {
   const [isMenuOpen, setMenuOpen] = React.useState(false);
   const classes = useStyles();
+  const location = useLocation();
   const store = useRootStore();
   const { t } = useTranslation();
 
@@ -86,30 +89,41 @@ const MenuBar = ({ items }: OwnProps) => {
       </AppBar>
       {items?.length && (
         <Drawer anchor="left" onClose={toggleMenuOpen} open={isMenuOpen}>
-          <List>
-            {items
-              .filter(
-                (item) => (item.admin && store.isUserAdmin) || !item.admin
-              )
-              .map((item, index) => (
-                <MenuItem
-                  item={item}
-                  key={index}
-                  toggleMenuOpen={toggleMenuOpen}
-                />
-              ))}
-          </List>
+          {items
+            .filter((item) => (item.admin && store.isUserAdmin) || !item.admin)
+            .map((item, index) => (
+              <MenuItem
+                classes={classes}
+                isActive={item.url === location.pathname}
+                item={item}
+                key={index}
+                toggleMenuOpen={toggleMenuOpen}
+              />
+            ))}
         </Drawer>
       )}
     </>
   );
 };
 
-const MenuItem = ({ item, toggleMenuOpen }: MenuItemProps) => {
+const MenuItem = ({
+  classes,
+  isActive,
+  item,
+  toggleMenuOpen,
+}: MenuItemProps) => {
   return (
-    <LinkStyled to={{ pathname: item.url }} onClick={toggleMenuOpen}>
+    <LinkStyled
+      className={isActive ? classes.menuActive : undefined}
+      to={{ pathname: item.url }}
+      onClick={toggleMenuOpen}
+    >
       <ListItem button>
-        {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+        {item.icon && (
+          <ListItemIcon className={isActive ? classes.iconActive : undefined}>
+            {item.icon}
+          </ListItemIcon>
+        )}
         <ListItemText primary={item.label} />
       </ListItem>
     </LinkStyled>

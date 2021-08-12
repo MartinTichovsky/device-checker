@@ -73,6 +73,7 @@ const getVendorList = (items?: Phones) =>
           (value, index, self): value is string =>
             value !== undefined && self.indexOf(value) === index
         )
+        .sort()
     : [];
 
 const DeviceList = () => {

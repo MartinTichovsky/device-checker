@@ -1,8 +1,26 @@
+import { RootStore } from "../stores/root-store";
+
 export type AuthToken = string;
 
 export interface BorrowedObj {
   user?: User;
   date?: number;
+}
+
+export interface CommonRequestProps<T> {
+  onError?: () => void;
+  onFinally?: () => void;
+  onSuccess: (response: T | undefined) => void;
+  store: RootStore;
+}
+
+export interface EditPhone {
+  code?: string;
+  os?: OsEnum;
+  vendor?: string;
+  model?: string;
+  osVersion?: string;
+  image?: string;
 }
 
 export enum OsEnum {

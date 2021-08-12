@@ -46,12 +46,12 @@ const Login = () => {
 
   return (
     <Grid
+      className={classes.grid}
       container
       spacing={0}
       direction="column"
       alignItems="center"
       justifyContent="center"
-      style={{ minHeight: "80vh" }}
     >
       <Grid className={classes.container} item>
         <form noValidate autoComplete="off">
@@ -80,7 +80,7 @@ const Login = () => {
               <CircularProgress size={24} />
             </Button>
           ) : (
-            <Button className={classes.button} onClick={() => handleLogin()}>
+            <Button className={classes.button} onClick={handleLogin}>
               {t(i18ObjectPath(lang.login.formButtonLogin))}
             </Button>
           )}

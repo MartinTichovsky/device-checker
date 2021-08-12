@@ -1,38 +1,39 @@
 import { getApiUrl, fetchApiWithGlobalCatch } from "../api";
 import schema from "../schemas/Phones.json";
 import { JSONSchema7 } from "json-schema";
-import { Phones } from "../types";
-import { RootStore } from "../../stores/root-store";
+import { CommonRequestProps, EditPhone, Phones } from "../types";
 import { ENDPOINTS } from "../endpoints";
 
-interface GetPhonesRequestProps {
-  onFinally?: () => void;
-  onSuccess: (response: Phones | undefined) => void;
-  store: RootStore;
+type GetPhonesRequestProps = CommonRequestProps<Phones>;
+
+interface CreatePhoneRequestProps extends CommonRequestProps<Phones> {
+  body: EditPhone;
 }
 
-export const getPhonesRequest = ({
-  onFinally,
-  onSuccess,
-  store,
-}: GetPhonesRequestProps) => {
-  fetchApiWithGlobalCatch<Phones>(
-    getApiUrl(ENDPOINTS.PHONES),
-    {
-      headers: {
-        "Auth-Token": store.user?.token || "",
-      },
+export const getPhonesRequest = ({ store, ...rest }: GetPhonesRequestProps) => {
+  fetchApiWithGlobalCatch<Phones>({
+    ...rest,
+    fetchProps: {
       method: "GET",
       schema: schema as JSONSchema7,
     },
-    store.notificationStore
-  )
-    .then((response) => {
-      onSuccess(response);
-    })
-    .finally(() => {
-      if (onFinally) {
-        onFinally();
-      }
-    });
+    store,
+    url: getApiUrl(ENDPOINTS.PHONES),
+  });
+};
+
+export const createPhoneRequest = ({
+  body,
+  store,
+  ...rest
+}: CreatePhoneRequestProps) => {
+  fetchApiWithGlobalCatch<Phones>({
+    ...rest,
+    fetchProps: {
+      method: "POST",
+      body: body as Record<string, unknown>,
+    },
+    store,
+    url: getApiUrl(ENDPOINTS.PHONES),
+  });
 };

@@ -1,10 +1,10 @@
 import { JSONSchema7 } from "json-schema";
-import { NotificationStore } from "../stores/notifiction-store";
 import { consoleLog } from "../utils/console";
 import { Validator } from "../utils/validator";
 import { ENDPOINTS } from "./endpoints";
+import { CommonRequestProps } from "./types";
 
-interface Props {
+interface FetchProps {
   body?: Record<string, unknown>;
   headers?: RequestInit["headers"];
   method: RequestInit["method"];
@@ -13,7 +13,7 @@ interface Props {
 
 export const fetchApi = async <T>(
   url: string,
-  { body, headers, method, schema }: Props
+  { body, headers, method, schema }: FetchProps
 ): Promise<T> => {
   const response = await fetch(url, {
     method,
@@ -37,16 +37,45 @@ export const fetchApi = async <T>(
   }
 };
 
-export const fetchApiWithGlobalCatch = async <T>(
-  url: string,
-  props: Props,
-  notificationStore: NotificationStore
-): Promise<T | undefined> => {
+interface ApiWithGlobalCatchProps<T> extends CommonRequestProps<T> {
+  fetchProps: FetchProps;
+  url: string;
+  useAuthToken?: boolean;
+}
+
+export const fetchApiWithGlobalCatch = <T>({
+  fetchProps,
+  store,
+  onError,
+  onFinally,
+  onSuccess,
+  url,
+  useAuthToken = true,
+}: ApiWithGlobalCatchProps<T>) => {
   try {
-    return await fetchApi<T>(url, props);
+    fetchApi<T>(url, {
+      ...fetchProps,
+      headers: {
+        ...fetchProps?.headers,
+        ...(useAuthToken && { "Auth-Token": store.user?.token || "" }),
+      },
+    })
+      .then((response) => {
+        onSuccess(response);
+      })
+      .finally(() => {
+        if (onFinally) {
+          onFinally();
+        }
+      })
+      .catch(() => {
+        if (onError) {
+          onError();
+        }
+      });
   } catch (e) {
     // TODO: make error messages user friendly
-    notificationStore.addNotification({
+    store.notificationStore.addNotification({
       color: "error",
       message: typeof e !== "string" ? e.toString() : e,
       severity: "error",

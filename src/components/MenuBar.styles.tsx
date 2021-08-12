@@ -24,8 +24,20 @@ export const useStyles = makeStyles((theme: Theme & ITheme) => ({
   appBar: {
     backgroundColor: theme.colors.primary,
   },
+  iconActive: {
+    "& svg": {
+      fill: "#fff",
+    },
+  },
   logout: {
     backgroundColor: "#fff",
+  },
+  menuActive: {
+    backgroundColor: theme.colors.primary,
+
+    "& .MuiTypography-root": {
+      color: "#fff",
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),

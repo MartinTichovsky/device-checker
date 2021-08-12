@@ -4,12 +4,23 @@ const dictionary: Lang = {
   card: {
     borrow: "Půjčit",
   },
+  common: {
+    os: "Systém",
+    vendor: "Výrobce",
+  },
+  createDevice: {
+    addDevice: "Přidat zařízení",
+    addedInfo: "Zařízení bylo úspěšně přidáno",
+    code: "Kódové označení (identifikátor)",
+    image: "Obrázek (URL)",
+    label: "Nové zařízení",
+    model: "Model",
+    osVersion: "Verze operačního systému",
+  },
   filter: {
     any: "Nezáleží",
-    os: "Systém",
     onlyAvailable: "Jen dostupné",
     search: "Hledat model",
-    vendor: "Výrobce",
   },
   general: {
     noResults: "Nebyly nalezeny žádné výsledky",
@@ -23,6 +34,10 @@ const dictionary: Lang = {
   },
   logout: {
     label: "Odhlásit",
+  },
+  menu: {
+    createDevice: "Přidat zařízení",
+    deviceList: "Seznam zařízení",
   },
 };
 

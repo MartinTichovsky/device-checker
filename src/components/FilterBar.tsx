@@ -114,7 +114,7 @@ const FilterBar = ({ onChange, vendorList }: OwnProps) => {
     <FilterContainer>
       <FilterItem width={130}>
         <InputLabel shrink id="select-placeholder-os">
-          {t(i18ObjectPath(lang.filter.os))}
+          {t(i18ObjectPath(lang.common.os))}
         </InputLabel>
         <Select
           className={classes.selectEmpty}
@@ -135,7 +135,7 @@ const FilterBar = ({ onChange, vendorList }: OwnProps) => {
       </FilterItem>
       <FilterItem width={130}>
         <InputLabel shrink id="select-placeholder-vendor">
-          {t(i18ObjectPath(lang.filter.vendor))}
+          {t(i18ObjectPath(lang.common.vendor))}
         </InputLabel>
         <Select
           className={classes.selectEmpty}

@@ -4,12 +4,23 @@ export type Lang = Readonly<{
   card: {
     borrow: string;
   };
+  common: {
+    os: string;
+    vendor: string;
+  };
+  createDevice: {
+    addDevice: string;
+    addedInfo: string;
+    code: string;
+    image: string;
+    label: string;
+    model: string;
+    osVersion: string;
+  };
   filter: {
     any: string;
     onlyAvailable: string;
-    os: string;
     search: string;
-    vendor: string;
   };
   general: {
     noResults: string;
@@ -23,6 +34,10 @@ export type Lang = Readonly<{
   };
   logout: {
     label: string;
+  };
+  menu: {
+    createDevice: string;
+    deviceList: string;
   };
 }>;
 

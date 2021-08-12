@@ -1,6 +1,12 @@
-import { makeStyles, TextField, Theme } from "@material-ui/core";
+import { makeStyles, Select, TextField, Theme } from "@material-ui/core";
 import styled from "@emotion/styled";
 import { ITheme } from "../theme";
+
+export const SelectStyled = styled(Select)({
+  marginBottom: 15,
+  padding: "5px 0",
+  width: "100%",
+});
 
 export const TextFieldStyled = styled(TextField)({
   display: "block",
@@ -20,7 +26,7 @@ export const TextFieldStyled = styled(TextField)({
   },
 
   ".MuiInput-input": {
-    padding: "10px 7px",
+    padding: "10px 0",
   },
 });
 
@@ -43,13 +49,14 @@ export const useStyles = makeStyles((theme: Theme & ITheme) => ({
     boxShadow:
       "0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)",
     padding: 15,
+    minWidth: 550,
   },
   context: {
     color: "#aaa",
     lineHeight: "1.5em",
   },
   grid: {
-    minHeight: "80vh",
+    minHeight: "90vh",
   },
   label: {
     fontWeight: 200,
@@ -64,5 +71,8 @@ export const useStyles = makeStyles((theme: Theme & ITheme) => ({
       backgroundColor: "#eee",
       border: "1px solid #fff",
     },
+  },
+  selectPlaceHolder: {
+    color: "red",
   },
 }));
