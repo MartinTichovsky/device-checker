@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from "mobx";
 import { makePersistable } from "mobx-persist-store";
 import React from "react";
-import { UserWithToken } from "../api/types";
+import { TypeEnum, UserWithToken } from "../api/types";
 import { NotificationStore } from "./notifiction-store";
 
 export class RootStore {
@@ -19,13 +19,13 @@ export class RootStore {
   }
 
   @observable
-  isPersisted: boolean = false;
+  public isPersisted: boolean = false;
 
   @observable
   private loggedUser: UserWithToken | null = null;
 
   get isUserAdmin() {
-    return this.user?.type === "admin";
+    return this.user?.type === TypeEnum.Admin;
   }
 
   get isAuthorized() {

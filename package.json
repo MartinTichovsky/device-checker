@@ -36,7 +36,7 @@
     "format": "prettier --write 'src/**/*.{ts,tsx,md,json,js,jsx,css}'",
     "format:verify": "prettier --list-different '**/*.{ts,tsx,md,json,js,jsx,css}'",
     "start": "react-scripts start",
-    "test": "jest --silent",
+    "test": "jest --silent --coverage",
     "tsc": "tsc --noEmit"
   },
   "eslintConfig": {

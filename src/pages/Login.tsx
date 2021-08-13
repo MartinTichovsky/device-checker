@@ -32,10 +32,11 @@ const Login = () => {
     loginRequest({
       login: formValues.current.login,
       password: formValues.current.password,
-      onFinally: () => {
+      onError: () => {
         setPending(false);
       },
       onSuccess: (response) => {
+        setPending(false);
         if (response) {
           store.setUser(response);
         }
@@ -68,6 +69,7 @@ const Login = () => {
             }
           />
           <TextFieldStyled
+            autoComplete="onS"
             label={t(i18ObjectPath(lang.login.formInputPassword))}
             type="password"
             name={lastObjectProperty(formValuesProxy.password)}
