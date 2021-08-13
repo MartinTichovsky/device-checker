@@ -4,7 +4,7 @@ import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 export class Validator<T> {
   constructor(private schema: JSONSchema7, private data: T) {
     if (!this.isObject(this.schema) || Array.isArray(this.schema)) {
-      throw "Schema must be an object";
+      throw new Error("Schema must be an object");
     }
   }
 

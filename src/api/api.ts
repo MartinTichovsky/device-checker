@@ -94,6 +94,6 @@ const validateResponse = <T>(schema: JSONSchema7, data: T) => {
   const validator = new Validator(schema, data);
   if (!validator.validate()) {
     consoleLog(validator.errors);
-    throw "Response is not valid";
+    throw new Error("Response is not valid");
   }
 };

@@ -78,7 +78,7 @@ const CreateDevice = () => {
       },
       store
     });
-  }, [setState, store, t]);
+  }, [setState, state, store, t]);
 
   return (
     <Grid
