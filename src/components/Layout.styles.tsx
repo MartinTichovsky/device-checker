@@ -8,7 +8,7 @@ export const CenterImage = styled("div")({
 });
 
 export const Content = styled("div")({
-  top: 70,
+  top: 63,
   position: "relative"
 });
 

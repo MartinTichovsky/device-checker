@@ -9,7 +9,11 @@ export const CardContainer = styled("div")({
 });
 
 export const FilterBarStyled = styled("div")({
-  padding: "10px 15px"
+  backgroundColor: "#ededed",
+  padding: "10px 15px",
+  position: "sticky",
+  top: 63,
+  zIndex: 1
 });
 
 export const NoResults = styled("div")({
